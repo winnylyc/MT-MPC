@@ -320,7 +320,7 @@ def dead_code_mutate(mutate_block, mutate_block_cov, indent, p, placeholder_vari
                 mutate_block_branch = []
                 mutate_block_cov_branch = []
                 mutate_text += mutate_block[i]
-            elif subbranch == 1 and int(inf_detail[-1]) == indent and inf_detail[1] == '!': ###用for或if结束block的情况
+            elif subbranch == 1 and int(inf_detail[-1]) == indent and inf_detail[1] == '!':
                 if coverage_flag == 1:
                     mutate_text += ('').join(mutate_block_branch)
                 else:
@@ -600,7 +600,7 @@ def EMI(src_dir = 'src_convert', tgt_dir = 'tgt', max_mutate = 5, flipcoin = 0.5
                             if type_choice <= 4:
                                 for generate_line in generate_txt.split('\n'):
                                     mutate_block.append(' ' * int(inf_detail[-1]) * 4 + generate_line + '\n')
-                                    mutate_block_cov.append(cov_inf) # 保证dead code elimination不会出错
+                                    mutate_block_cov.append(cov_inf)
             txt_mutate += '}'
             f_cov.close()
             f_code.close()
@@ -725,7 +725,6 @@ def EMI_party(src_dir = 'src_convert', tgt_dir = 'tgt'):
 
 
 if __name__ == '__main__':
-    os.chdir("/home/ylipf/MPCtest/emp-test")
 
     # EMI('src_convert', 'tgt', max_mutate = 5)
     # EMI_private('src_convert', 'tgt')

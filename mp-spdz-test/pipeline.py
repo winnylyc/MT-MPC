@@ -23,9 +23,9 @@ def modify_name(experiment_all, seed_dir):
 
 ### Used for clear source code, bytecode and schedule generated during pipeline in mp-spdz file ###
 def clear(experiment_all):
-    source_dir = "/home/ylipf/MPCtest/mp-spdz/Programs/Source"
-    byte_dir = "/home/ylipf/MPCtest/mp-spdz/Programs/Bytecode"
-    schedule_dir = "/home/ylipf/MPCtest/mp-spdz/Programs/Schedules"
+    source_dir = "../mp-spdz/Programs/Source"
+    byte_dir = "../mp-spdz/Programs/Bytecode"
+    schedule_dir = "../mp-spdz/Programs/Schedules"
     # source_files = glob.glob(source_dir+"/fuzz"+experiment_all + '*')
     # print(source_files)
     os.system("rm -rf " + source_dir+"/fuzz"+experiment_all + '*')

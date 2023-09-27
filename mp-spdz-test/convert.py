@@ -98,7 +98,6 @@ def convert(src_dir = 'src_2'):
             else:
                 txt_convert += line
                 if line.find(' = ') != -1:
-                    ### 目前只看考虑了sint和sint的array
                     temp_split = line.split(' = ')
                     if temp_split[1].find('Array') != -1:
                         var_dic[temp_split[0]] = 'sintarray'
@@ -111,7 +110,6 @@ def convert(src_dir = 'src_2'):
             if var_dic[var] == 'sint':
                 checksum += ' ' + var + ' +'
             else:
-                ###目前array的固定设置是长度为10
                 for i in range(10):
                     checksum += ' ' + var + '[' + str(i) + ']' + ' +'
         txt_convert += checksum[:-2] + '\n'

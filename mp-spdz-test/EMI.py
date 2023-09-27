@@ -259,7 +259,7 @@ def dead_code_mutate(mutate_block, mutate_block_cov, indent, p):
                 mutate_block_branch = []
                 mutate_block_cov_branch = []
                 mutate_text += mutate_block[i]
-            elif subbranch == 1 and int(inf_detail[-1]) == indent and inf_detail[1] == '!': ###用for或if结束block的情况
+            elif subbranch == 1 and int(inf_detail[-1]) == indent and inf_detail[1] == '!':
                 if coverage_flag == 1:
                     mutate_text += ('').join(mutate_block_branch)
                 else:
@@ -398,7 +398,7 @@ def EMI(src_dir = 'src_2_convert', tgt_dir = 'tgt', max_mutate = 5, flipcoin = 0
                         mutate_block = []
                         mutate_block_cov = []
                         # print(inf_detail)
-                        if inf_detail[1] == '!':  ### 用for或if结束block的情况
+                        if inf_detail[1] == '!':
                             mutate_block_flag = 1
                             coverage_flag = -1
                             mutate_block.append(line)
@@ -482,7 +482,7 @@ def EMI(src_dir = 'src_2_convert', tgt_dir = 'tgt', max_mutate = 5, flipcoin = 0
                         if type_choice <= 4:
                             for generate_line in generate_txt.split('\n'):
                                 mutate_block.append(' ' * int(inf_detail[-1]) * 4 + generate_line + '\n')
-                                mutate_block_cov.append(cov_inf) # 保证dead code elimination不会出错
+                                mutate_block_cov.append(cov_inf)
             f_cov.close()
             f_code.close()
             f = open(mutate_file, 'w')
@@ -550,7 +550,6 @@ def EMI_private_ori(src_dir = 'src_2_convert', tgt_dir = 'tgt'):
         txt_mutate = ''
         mutate_file = os.path.join(out_dir, file.split('/')[-1])
         revealed_list = []
-        ### 暂时不reveal array
         array_list = []
         f_code = open(file)
         while True:
@@ -570,7 +569,6 @@ def EMI_private_ori(src_dir = 'src_2_convert', tgt_dir = 'tgt'):
                     if variable not in array_list:
                         array_list.append(variable)
                 if variable not in revealed_list:
-                    ### 目前不会对mutate block中的变量做reveal EMI
                     if (variable not in array_list) and random.random()<0.5 and variable.find('varblock') == -1:
                         # if line.find('update') != -1:
                         #     # line_split = line.split('.update(')
@@ -710,6 +708,5 @@ def EMI_private(src_dir = 'src_2_convert', tgt_dir = 'tgt'):
 
 
 if __name__ == '__main__':
-    os.chdir("/home/ylipf/MPCtest/mp-spdz-test")
     # EMI(src_dir = 'exp40_0/seed_convert', tgt_dir = 'exp40_0/tgt')
     EMI_private(src_dir = 'exp21_0/seed_convert', tgt_dir = 'exp21_0/tgt')

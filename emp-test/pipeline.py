@@ -21,15 +21,6 @@ def modify_name(experiment_all, seed_dir):
         new_file_name = split_name[0]+experiment_all + '-' + '-'.join(split_name[1:])
         os.rename(os.path.join(seed_dir, file_name), os.path.join(seed_dir, new_file_name))
 
-### Used for clear source code, bytecode and schedule generated during pipeline in mp-spdz file ###
-def clear(experiment_all):
-    source_dir = "/home/ylipf/MPCtest/EzPC/EzPC/EzPC/test_fuzz"
-    byte_dir = "/home/ylipf/MPCtest/EzPC/EzPC/EzPC"
-    # source_files = glob.glob(source_dir+"/fuzz"+experiment_all + '*')
-    # print(source_files)
-    os.system("rm -rf " + source_dir+"/fuzz"+experiment_all + '*')
-    os.system("rm -rf " + byte_dir+"/fuzz"+experiment_all + '*')
-
 def main(experiment_all = 'exp35', log = False):
     if log == True:
         original_stdout = sys.stdout
@@ -98,7 +89,6 @@ def main(experiment_all = 'exp35', log = False):
         if log == True:
             f.close()
             sys.stdout = original_stdout
-    clear(experiment_all)
 
 def main_mutprivate(experiment_all = 'exp20', log = False):
     if log == True:
@@ -174,7 +164,6 @@ def main_mutprivate(experiment_all = 'exp20', log = False):
         if log == True:
             f.close()
             sys.stdout = original_stdout
-    clear(experiment_all)
 
 def main_mutparty(experiment_all = 'exp20', log = False):
     if log == True:
@@ -222,62 +211,6 @@ def main_mutparty(experiment_all = 'exp20', log = False):
         if log == True:
             f.close()
             sys.stdout = original_stdout
-    clear(experiment_all)
-    
-
-def main_collect(experiment_all = 'exp10'):
-    os.system("rm -rf " + experiment_all+"_c*")
-    batch_number = 200
-    # max_mutation = 20
-    max_mutation = 20
-    exp_batchs = glob('./' + experiment_all + '_*')
-    batch_num = 0
-    example_num = 0
-    for exp_batch in exp_batchs:
-        exps = glob(exp_batch+'/seed_convert/*cov.txt')
-        for exp in exps:
-            overflow = 0
-            f = open(exp)
-            ### chekch whether there is an overflow reminder in cov.txt
-            while True:
-                line = f.readline()
-                if not line:
-                    break
-                if line.find('there is a overflow') != -1:
-                    overflow = 1
-                    break
-            f.close()
-            if overflow == 0:
-                collect_path = experiment_all + '_c' + str(batch_num)
-                if example_num == 0:
-                    os.makedirs(collect_path, exist_ok=True)
-                    os.makedirs(os.path.join(collect_path, 'seed_convert'), exist_ok=True)
-                    os.makedirs(os.path.join(collect_path, 'tgt'), exist_ok=True)
-                seed_file = exp[:-8] + '.py'
-                exp_split = exp.split('/')
-                tgt_file = '/'.join(exp_split[:-2]+['tgt']+exp_split[-1:])[:-8] + '.txt'
-                shutil.copy(seed_file, os.path.join(collect_path, 'seed_convert', 'fuzz'+ experiment_all + '-%.5d.py'%(example_num)))
-                shutil.copy(exp, os.path.join(collect_path, 'seed_convert', 'fuzz'+ experiment_all + '-%.5d_cov.txt'%(example_num)))
-                shutil.copy(tgt_file, os.path.join(collect_path, 'tgt', 'fuzz'+ experiment_all + '-%.5d.txt'%(example_num)))
-                example_num += 1
-                if example_num == batch_number:
-                    batch_num += 1
-                    example_num = 0
-
-                    experiment = collect_path
-                    seed_dir = os.path.join(experiment, 'seed')
-                    seedout_dir = os.path.join(experiment, 'tgt')
-                    seed_dir = seed_dir + '_convert'
-                    EMI(seed_dir, seedout_dir, max_mutation, 0.5, experiment_all, templete = 'gen_block_templete.py')
-                    mutate_dir = seed_dir + '_mutate'
-                    mutateout_dir = os.path.join(experiment, 'tgt_mutate')
-                    compile(mutate_dir, mutateout_dir)
-                    check(seed_dir, mutate_dir, seedout_dir, mutateout_dir, max_mutation)
-
-
-
-
-
 
 
 if __name__ == '__main__':
@@ -287,7 +220,6 @@ if __name__ == '__main__':
     parser.add_option("-e", "--exp", dest="experiment_all", help="expriment name")
     parser.add_option("-p", "--private", dest="private", action="store_true", help="whether conduct EMI on private")
     parser.add_option("-a", "--party", dest="party", action="store_true", help="whether conduct EMI on party")
-    parser.add_option("-c", "--collect", dest="collect", action="store_true", help="whether collect seed without overflow")
     parser.add_option("-l", "--log", dest="log", action="store_true", help="whether keep the log")
     (options, args) = parser.parse_args()
     experiment_all = options.experiment_all
@@ -299,8 +231,6 @@ if __name__ == '__main__':
         main_mutprivate(experiment_all, log = log)
     elif party == True:
         main_mutparty(experiment_all, log = log)
-    elif collect == True:
-        main_collect(experiment_all)
     else:
         main(experiment_all, log = log)
     # main(experiment_all)
