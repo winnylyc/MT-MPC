@@ -22,3 +22,6 @@ https://github.com/mpc-msri/EzPC/issues/189
 
 ### EMP:
 https://github.com/emp-toolkit/emp-sh2pc/issues/37
+
+## Acknowledgments
+The Seed Generation Tool of this project is based on the work of Wai Kin WONG from Hong Kong University of Science and Technology, which is not publicly available. We thank him for his contribution and for allowing us to use his code.
